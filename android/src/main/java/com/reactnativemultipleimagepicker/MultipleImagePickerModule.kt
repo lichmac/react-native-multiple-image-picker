@@ -40,6 +40,7 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) : ReactCo
     private var isPreview: Boolean = true
     private var isExportThumbnail: Boolean = false
     private var maxVideo: Int = 20
+    private var isCamera: Boolean = true
 
     @ReactMethod
     fun openPicker(options: ReadableMap?, promise: Promise): Unit {
@@ -62,6 +63,7 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) : ReactCo
                 .setPictureStyle(mPictureParameterStyle)
                 .isPreviewImage(isPreview)
                 .isPreviewVideo(isPreview)
+                .isCamera(isCamera)
                 .isReturnEmpty(true)
                 .selectionMode(if (singleSelectedMode) PictureConfig.SINGLE else PictureConfig.MULTIPLE)
                 .forResult(object : OnResultCallbackListener<Any?> {
@@ -108,6 +110,7 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) : ReactCo
             isPreview = options.getBoolean("isPreview")
             isExportThumbnail = options.getBoolean("isExportThumbnail")
             maxVideo = options.getInt("maxVideo")
+            isCamera = options.getBoolean("usedCameraButton")
             mPictureParameterStyle = getStyle(options)
         }
     }
@@ -172,7 +175,8 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) : ReactCo
         val height: Int = asset.getInt("height")
         val size: Long = asset.getDouble("size").toLong()
         val bucketId: Long = asset.getDouble("bucketId").toLong()
-        val localMedia = LocalMedia(id, path, realPath, fileName, parentFolderName, duration, chooseModel, mimeType, width, height, size, bucketId)
+        val dateAddedColumn: Long = Date().time.toLong()
+        val localMedia = LocalMedia(id, path, realPath, fileName, parentFolderName, duration, chooseModel, mimeType, width, height, size, bucketId, dateAddedColumn)
         return localMedia
     }
 
@@ -185,7 +189,7 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) : ReactCo
         media.putString("fileName", item.fileName)
         media.putInt("width", item.width)
         media.putInt("height", item.height)
-        media.putString("mine", item.mimeType)
+        media.putString("mime", item.mimeType)
         media.putString("type", type)
         media.putInt("localIdentifier", item.id.toInt())
         media.putInt("position", item.position)
