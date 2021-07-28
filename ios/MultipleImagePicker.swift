@@ -67,10 +67,10 @@ class MultipleImagePicker: NSObject, TLPhotosPickerViewControllerDelegate,UINavi
         viewController.configure = MultipleImagePickerConfigure
         viewController.selectedAssets = self.selectedAssets
         viewController.logDelegate = self
-        viewController.modalTransitionStyle = .coverVertical
-        viewController.modalPresentationStyle = .overCurrentContext
-        
+       
         DispatchQueue.main.async {
+            viewController.modalTransitionStyle = .coverVertical
+            viewController.modalPresentationStyle = .overCurrentContext
             self.getTopMostViewController()?.present(viewController, animated: true, completion: nil)
         }
     }
